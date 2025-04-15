@@ -1,0 +1,40 @@
+# バイナリやオブジェクトファイル
+*.o
+*.mod
+*.exe
+*.out
+
+# Pythonのキャッシュファイル
+__pycache__/
+*.py[cod]
+
+# ビルド・バイナリディレクトリ
+/build/
+/bin/
+
+# VSCodeの設定（チームで共有しない場合）
+.vscode/
+
+# 一時ファイル
+*~
+*.swp
+.DS_Store
+
+# Fortran中間生成ファイル（念のため）
+*.lst
+*.map
+
+# ログや一時的な結果
+*.log
+
+# Numpyやmatplotlibなどが作る一時ファイル（稀に）
+*.npy
+*.npz
+*.png
+*.pdf
+
+*.env
+secrets.json
+*.pem
+
+*.ipynb
