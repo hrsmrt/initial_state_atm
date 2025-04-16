@@ -50,9 +50,12 @@ def main():
 	data = data.reshape(nz,nr)
 	for i in range(nz):
 		data[i,:] = data[i,:] - bs_tem[i]
-	plt.contourf(X[:60,:],Y[:60,:],data[:60,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
+	plt.contourf(X[:70,:],Y[:70,:],data[:70,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
 	plt.colorbar()
 	save_fig("vor_T_all.jpeg")
+	plt.close()
+	set_plt()
+	plt.contourf(X[:60,:],Y[:60,:],data[:60,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
 	plt.ylim(0, 20)
 	save_fig("vor_T.jpeg")
 	plt.close()

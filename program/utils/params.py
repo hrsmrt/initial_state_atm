@@ -34,7 +34,8 @@ settings = {
     "lz_low" : 3175,
     "lz_high" : 4762.5,
     "beta" : 2.0,
-    "n_balance" : 15
+    "n_balance" : 15,
+    "z_calc_max" : 53
   },
   "wind_profile_param" : {
     "wind_profile_folder" : "wind_profile/",

@@ -25,6 +25,7 @@ module mod_vortex
   real(8) :: lz_high
   real(8) :: beta
   integer :: n_balance
+  integer :: z_calc_max
   namelist / vortex_param / &
   vortex_folder, &
   vortex_size, &
@@ -38,5 +39,6 @@ module mod_vortex
   lz_low, &
   lz_high, &
   beta, &
-  n_balance
+  n_balance, &
+  z_calc_max
 end module mod_vortex

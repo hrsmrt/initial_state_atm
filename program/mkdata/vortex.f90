@@ -121,7 +121,7 @@ program vortex
     p_ = p_ * p_
     write(11,*) sum(p_)/size(p_)
   end do
-  vor_T = vor_p / (287.1 * vor_rho)
+  vor_T(:,:z_calc_max) = vor_p(:,:z_calc_max) / (287.1 * vor_rho(:,:z_calc_max))
 
   call output_2d(vor_p, "vor_p.txt")
   call output_2d(vor_T, "vor_T.txt")
@@ -194,13 +194,13 @@ subroutine hydrostatic_balance
     k = 1
     left_term = (vor_p(i,k+1) - vor_p(i,k)) / (z(k+1) - z(k))
     vor_rho(i,k) = - left_term / g
-    do k = 2, nz-1
+    do k = 2, z_calc_max
       left_term = (vor_p(i,k+1) - vor_p(i,k-1)) / (z(k+1) - z(k-1))
       vor_rho(i,k) = - left_term / g
     end do
-    k = nz
-    left_term = (vor_p(i,k) - vor_p(i,k-1)) / (z(k) - z(k-1))
-    vor_rho(i,k) = - left_term / g
+    !k = nz
+    !left_term = (vor_p(i,k) - vor_p(i,k-1)) / (z(k) - z(k-1))
+    !vor_rho(i,k) = - left_term / g
   end do
 end subroutine hydrostatic_balance
 subroutine gradient_balance
@@ -211,7 +211,7 @@ subroutine gradient_balance
   real(8) :: term2
   real(8) :: right_term
   do i = nr, 2, -1
-    do k = 1, nz
+    do k = 1, z_calc_max
       v_ =  0.5 * (vor_v(i,k) + vor_v(i-1,k))
       rho_ = 0.5 * (vor_rho(i,k) + vor_rho(i-1,k))
       term1 = f * v_

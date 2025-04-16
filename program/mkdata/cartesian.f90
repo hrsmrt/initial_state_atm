@@ -45,12 +45,12 @@ program mkdata_cart_atm
   u(:,:,:) = 0
   v(:,:,:) = 0
   call input_bses
+  call input_vortex
   do k = 1, nz
-    pre(k,:,:) = bs_pre(k)
-    tem(k,:,:) = bs_tem(k)
+    pre(k,:,:) = vor_p(nr,k)
+    tem(k,:,:) = vor_T(nr,k)
     qv(k,:,:) = bs_qv(k)
   end do
-  call input_vortex
   call add_vortex
   call add_u_profile
   call output_data
