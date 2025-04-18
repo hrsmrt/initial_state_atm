@@ -12,6 +12,14 @@ __pycache__/
 /build/
 /bin/
 
+/log/
+/figure/
+/fig/
+/data/
+/config/
+a.py
+__init__.py
+
 # VSCodeの設定（チームで共有しない場合）
 .vscode/
 
