@@ -76,8 +76,13 @@ subroutine add_vortex
         dist_x = real(i - vor_cx) * dx
         dist_y = real(j - vor_cy) * dy
         dist = sqrt(dist_x**2 + dist_y**2)
-        sin_theta = dist_y / dist
-        cos_theta = dist_x / dist
+        if (dist == 0.0) then
+          sin_theta = 0.0
+          cos_theta = 0.0
+        else
+          sin_theta = dist_y / dist
+          cos_theta = dist_x / dist
+        end if
         if (dist < vortex_size) then
           dist_index = dist / dr
           dist_index_int = int(dist_index)
@@ -104,9 +109,9 @@ subroutine add_vortex
             rho(k,j,i) = ratio2 * vor_rho(dist_index_int+1,k) + &
                         ratio1 * vor_rho(dist_index_int+2,k)
             u(k,j,i) = - (ratio2 * vor_v(dist_index_int+1,k) + &
-                        ratio1 * vor_v(dist_index_int+2,k)) * cos_theta
-            v(k,j,i) = (ratio2 * vor_v(dist_index_int+1,k) + &
                         ratio1 * vor_v(dist_index_int+2,k)) * sin_theta
+            v(k,j,i) = (ratio2 * vor_v(dist_index_int+1,k) + &
+                        ratio1 * vor_v(dist_index_int+2,k)) * cos_theta
           end if
         end if
       end do
@@ -191,7 +196,7 @@ subroutine output_3d(data,filename)
   implicit none
   character(200) filename
   character(200) filepath
-  real(8) :: data(nx,ny,nz)
+  real(8) :: data(nz,ny,nx)
   filepath = trim(output_folderpath)//trim(filename)
   open(unit=10, iostat=ios, file=filepath, action='write', &
         &access="stream", form='formatted',status='replace')
