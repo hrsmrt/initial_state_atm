@@ -31,6 +31,8 @@ def main():
 	set_plt()
 	data = np.loadtxt(data_dir + "qv.txt")
 	data = data.reshape(nx,ny,nz)
+	print("min: ",np.min(data))
+	print("max: ",np.max(data))
 	X,Y = np.meshgrid(ygrid * 1e-3, vgrid_c * 1e-3)
 	for x in range(0,nx,32):
 		set_plt()
