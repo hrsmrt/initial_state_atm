@@ -62,7 +62,7 @@ def main():
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.xlabel("x (km)")
 		plt.ylabel("y (km)")
-		plt.contourf(X,Y,data[:,:,z], levels=np.linspace(-15,15,20), cmap="jet",extend="both")
+		plt.contourf(X,Y,data[:,:,z].T, levels=np.linspace(-15,15,20), cmap="jet",extend="both")
 		plt.colorbar(label="m/s")
 		save_fig(output_dir3,f"z{z:02d}.jpeg")
 		plt.close()

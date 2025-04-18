@@ -62,7 +62,7 @@ def main():
 		plt.ylabel("y (km)")
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.contourf(X,Y,data[:,:,z], levels=20, cmap="jet",extend="both")
+		plt.contourf(X,Y,data[:,:,z].T, levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="hPa")
 		save_fig(output_dir3,f"z{z:02d}.jpeg")
 		plt.close()
