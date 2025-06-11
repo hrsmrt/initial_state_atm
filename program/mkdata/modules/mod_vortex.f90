@@ -6,11 +6,15 @@ module mod_vortex
   real(8), allocatable :: v_z(:)
   real(8), allocatable :: p_bs(:)
   real(8), allocatable :: T_bs(:)
+  real(8), allocatable :: rho_bs(:)
   real(8), allocatable :: vor_v(:,:)
   real(8), allocatable :: vor_p(:,:)
+  real(8), allocatable :: vor_p_all(:,:)
   real(8), allocatable :: p_(:,:)
   real(8), allocatable :: vor_T(:,:)
+  real(8), allocatable :: vor_T_all(:,:)
   real(8), allocatable :: vor_rho(:,:)
+  real(8), allocatable :: vor_rho_all(:,:)
   real(8) :: vortex_size
   integer :: nr
   real(8) :: dr ! m

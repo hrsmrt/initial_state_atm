@@ -36,11 +36,15 @@ program vortex
   allocate(v_z(nz))
   allocate(p_bs(nz))
   allocate(T_bs(nz))
+  allocate(rho_bs(nz))
   allocate(vor_v(nr,nz))
-  allocate(vor_p(nr,nz))
+  allocate(vor_p(nr,nz)) ! 基本場からのずれ
+  allocate(vor_p_all(nr,nz))
   allocate(p_(nr,nz))
-  allocate(vor_T(nr,nz))
-  allocate(vor_rho(nr,nz))
+  allocate(vor_T(nr,nz)) ! 基本場からのずれ
+  allocate(vor_T_all(nr,nz))
+  allocate(vor_rho(nr,nz)) ! 基本場からのずれ
+  allocate(vor_rho_all(nr,nz))
   output_folderpath = trim(output_folderpath)//trim(vortex_folder)
   call execute_command_line("mkdir -p "//trim(output_folderpath))
   open(unit=11, file="log/vortex.txt", status='replace')
@@ -63,9 +67,11 @@ program vortex
   call input_1d(z,filepath_vgrid_c)
   call input_1d(p_bs,fpath_bs_pre)
   call input_1d(T_bs,fpath_bs_tem)
-  write(11,*) "z_index, z(高度), p(圧力), T(温度)"
+  ! vor_T(:,:z_calc_max) = vor_p(:,:z_calc_max) / (287.1 * vor_rho_all(:,:z_calc_max))
+  rho_bs = p_bs / (287.1 * T_bs) ! 基本場の密度
+  write(11,*) "z_index, z(高度), p(圧力), T(温度), rho(密度)"
   do i = nz, 1, -1
-    write(11,*) "z(", i, ") = ", z(i), p_bs(i), T_bs(i)
+    write(11,*) "z(", i, ") = ", z(i), p_bs(i), T_bs(i), rho_bs(i)
   end do
 
   ! v(方位角方向風速)の半径方向分布
@@ -106,12 +112,12 @@ program vortex
   end do
   ! p(r,z), T(r,z)の計算
   do k = 1, nz
-    vor_p(:,k) = p_bs(k)
+    vor_p(:,k) = 0.d0
     vor_T(:,k) = T_bs(k)
   end do
   call output_2d(vor_v, "vor_v.txt")
   call hydrostatic_balance
-  call output_1d(vor_rho(1,:), "bs_rho.txt")
+  call output_1d(rho_bs(:), "bs_rho.txt")
   
   do i = 1,n_balance
     p_ = vor_p
@@ -121,11 +127,28 @@ program vortex
     p_ = p_ * p_
     write(11,*) sum(p_)/size(p_)
   end do
-  vor_T(:,:z_calc_max) = vor_p(:,:z_calc_max) / (287.1 * vor_rho(:,:z_calc_max))
+  do k = 1, nz
+    vor_p_all(:,k) = vor_p(:,k) + p_bs(k)
+    vor_rho_all(:,k) = vor_rho(:,k) + rho_bs(k)
+  end do
+  vor_T_all(:,:) = vor_p_all(:,:) / (287.1 * vor_rho_all(:,:))
+  do k = 1, nz
+    vor_T(:,k) = vor_T_all(:,k) - T_bs(k)
+  end do
+  write(11,*) "r=rmaxにおけるv_r, v_z, p, T, rhoの値(基本場からの差)"
+  write(11,*) "z_index, z(高度), p(圧力), T(温度), rho(密度)"
+  do i = 1, nz
+    write(11,*) "z(", i, ") = ", z(i), vor_p(nr,i), vor_T(nr,i), vor_rho(nr,i)
+  end do
+  write(11,*) "r=rmax-1におけるv_r, v_z, p, T, rhoの値(基本場からの差)"
+  write(11,*) "z_index, z(高度), p(圧力), T(温度), rho(密度)"
+  do i = 1, nz
+    write(11,*) "z(", i, ") = ", z(i), vor_p(nr-1,i), vor_T(nr-1,i), vor_rho(nr-1,i)
+  end do
 
-  call output_2d(vor_p, "vor_p.txt")
-  call output_2d(vor_T, "vor_T.txt")
-  call output_2d(vor_rho, "vor_rho.txt")
+  call output_2d(vor_p_all, "vor_p.txt")
+  call output_2d(vor_T_all, "vor_T.txt")
+  call output_2d(vor_rho_all, "vor_rho.txt")
   close(11)
 contains
 subroutine input_1d(data,filepath)
@@ -213,7 +236,7 @@ subroutine gradient_balance
   do i = nr, 2, -1
     do k = 1, z_calc_max
       v_ =  0.5 * (vor_v(i,k) + vor_v(i-1,k))
-      rho_ = 0.5 * (vor_rho(i,k) + vor_rho(i-1,k))
+      rho_ = 0.5 * (vor_rho(i,k) + vor_rho(i-1,k)) + rho_bs(k)
       term1 = f * v_
       term2 = v_ ** 2 / r(i)
       right_term = rho_ * (term1 + term2)
