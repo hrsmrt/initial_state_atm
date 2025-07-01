@@ -7,7 +7,7 @@
 
 ## 使用手順
 
-- `utils/setting.py`を編集
+- `utils/params.py`を編集
 - `make`: fortranプログラムのコンパイル
 - `make run`: データ及び基本的な図の生成
 
