@@ -34,7 +34,7 @@ def main():
 	print("min: ",np.min(data[:,:,:]))
 	print("max: ",np.max(data[:,:,:]))
 	X,Y = np.meshgrid(ygrid * 1e-3, vgrid_c * 1e-3)
-	for x in range(0,nx,32):
+	for x in range(0,nx,int(nx/16)):
 		set_plt()
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.yticks([10,20,30])
@@ -45,7 +45,7 @@ def main():
 		save_fig(output_dir,f"x{x:02d}.jpeg")
 		plt.close()
 	X,Y = np.meshgrid(xgrid * 1e-3, vgrid_c * 1e-3)
-	for y in range(0,ny,32):
+	for y in range(0,ny,int(nx/16)):
 		set_plt()
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.yticks([10,20,30])
