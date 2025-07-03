@@ -199,13 +199,13 @@ subroutine output_3d(data,filename)
   real(8) :: data(nz,ny,nx)
   filepath = trim(output_folderpath)//trim(filename)
   open(unit=10, iostat=ios, file=filepath, action='write', &
-        &access="stream", form='formatted',status='replace')
+        &access="stream", form='unformatted',status='replace')
   ! ファイルが正常に開けたかどうかをチェックする
   if(ios /= 0) then
       write(*, *) 'Failed to open file"', filepath, '"for output'
       stop
   endif
-  write(10,*) data
+  write(10) data
   close(10)
 end subroutine
 end program mkdata_cart_atm
