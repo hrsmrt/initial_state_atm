@@ -2,19 +2,19 @@ program wind_profile
     use settings ! for setting parameters
     use filepaths
     implicit none
-    real(8), parameter :: pi = 3.14159265358979323846
+    real(4), parameter :: pi = 3.14159265358979323846
     character(len=char_len) :: filename
     character(len=char_len) :: filename_cnf
     character(len=char_len) :: shear_type
-    real(8), allocatable :: vgrid_c(:)
-    real(8) :: z1
-    real(8) :: z2
-    real(8) :: z3
-    real(8) :: z4
-    real(8) :: u1
-    real(8) :: u2
-    real(8), allocatable :: bs_u(:)
-    real(8) :: z
+    real(4), allocatable :: vgrid_c(:)
+    real(4) :: z1
+    real(4) :: z2
+    real(4) :: z3
+    real(4) :: z4
+    real(4) :: u1
+    real(4) :: u2
+    real(4), allocatable :: bs_u(:)
+    real(4) :: z
     integer :: k
     character(len=char_len) :: wind_profile_folder
     namelist / wind_profile_param / &

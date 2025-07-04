@@ -1,10 +1,10 @@
 module settings
   implicit none
-  real(8) :: triangle_size
+  real(4) :: triangle_size
   integer :: nx
   integer :: ny
   integer :: nz
-  real(8) :: f
+  real(4) :: f
 
   namelist /setting_params/ &
   triangle_size, &

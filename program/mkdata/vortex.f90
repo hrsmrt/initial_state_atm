@@ -155,7 +155,7 @@ subroutine input_1d(data,filepath)
   implicit none
   character(len=*) :: filepath
   integer :: ios
-  real(8), intent(inout) :: data(nz)
+  real(4), intent(inout) :: data(nz)
   open(unit=10, iostat=ios, file=filepath, action='read', &
         & form='formatted', status='old', position='rewind')
   ! ファイルが正常に開けたかどうかをチェックする
@@ -171,7 +171,7 @@ end subroutine input_1d
 subroutine output_1d(data,filename)
   implicit none
   integer, parameter :: n_char = 256
-  real(8) :: data(:)
+  real(4) :: data(:)
   character(len=*) filename
   character(n_char) filepath
   integer :: unit = 10
@@ -192,7 +192,7 @@ end subroutine
 subroutine output_2d(data,filename)
   implicit none
   integer, parameter :: n_char = 256
-  real(8) :: data(:,:)
+  real(4) :: data(:,:)
   character(len=*) filename
   character(n_char) filepath
   integer :: unit = 10
@@ -211,7 +211,7 @@ subroutine output_2d(data,filename)
   write(11,*) "output", filename
 end subroutine
 subroutine hydrostatic_balance
-  real(8) :: left_term
+  real(4) :: left_term
   integer :: i,k
   do i = 1, nr
     k = 1
@@ -228,11 +228,11 @@ subroutine hydrostatic_balance
 end subroutine hydrostatic_balance
 subroutine gradient_balance
   integer :: i,k
-  real(8) :: v_
-  real(8) :: rho_
-  real(8) :: term1
-  real(8) :: term2
-  real(8) :: right_term
+  real(4) :: v_
+  real(4) :: rho_
+  real(4) :: term1
+  real(4) :: term2
+  real(4) :: right_term
   do i = nr, 2, -1
     do k = 1, z_calc_max
       v_ =  0.5 * (vor_v(i,k) + vor_v(i-1,k))
