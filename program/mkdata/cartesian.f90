@@ -26,12 +26,12 @@ program mkdata_cart_atm
   allocate(vor_T(nr,nz))
   allocate(vor_v(nr,nz))
   allocate(vor_rho(nr,nz))
-  allocate(pre(nz,ny,nx))
-  allocate(tem(nz,ny,nx))
-  allocate(rho(nz,ny,nx))
-  allocate(qv(nz,ny,nx))
-  allocate(u(nz,ny,nx))
-  allocate(v(nz,ny,nx))
+  allocate(pre(nx,ny,nz))
+  allocate(tem(nx,ny,nz))
+  allocate(rho(nx,ny,nz))
+  allocate(qv(nx,ny,nz))
+  allocate(u(nx,ny,nz))
+  allocate(v(nx,ny,nz))
   output_folderpath = trim(output_folderpath)//trim(cart_folder)
   call execute_command_line("mkdir -p "//trim(output_folderpath))
   bs_pre(:) = 0
@@ -47,9 +47,9 @@ program mkdata_cart_atm
   call input_bses
   call input_vortex
   do k = 1, nz
-    pre(k,:,:) = vor_p(nr,k)
-    tem(k,:,:) = vor_T(nr,k)
-    qv(k,:,:) = bs_qv(k)
+    pre(:,:,k) = vor_p(nr,k)
+    tem(:,:,k) = vor_T(nr,k)
+    qv(:,:,k) = bs_qv(k)
   end do
   call add_vortex
   call add_u_profile
@@ -102,15 +102,15 @@ subroutine add_vortex
             write(11,*) "ratio2 = ", ratio2
           end if
           if (dist_index_int < nr - 1) then
-            pre(k,j,i) = ratio2 * vor_p(dist_index_int+1,k) + &
+            pre(i,j,k) = ratio2 * vor_p(dist_index_int+1,k) + &
                         ratio1 * vor_p(dist_index_int+2,k)
-            tem(k,j,i) = ratio2 * vor_T(dist_index_int+1,k) + &
+            tem(i,j,k) = ratio2 * vor_T(dist_index_int+1,k) + &
                         ratio1 * vor_T(dist_index_int+2,k)
-            rho(k,j,i) = ratio2 * vor_rho(dist_index_int+1,k) + &
+            rho(i,j,k) = ratio2 * vor_rho(dist_index_int+1,k) + &
                         ratio1 * vor_rho(dist_index_int+2,k)
-            u(k,j,i) = - (ratio2 * vor_v(dist_index_int+1,k) + &
+            u(i,j,k) = - (ratio2 * vor_v(dist_index_int+1,k) + &
                         ratio1 * vor_v(dist_index_int+2,k)) * sin_theta
-            v(k,j,i) = (ratio2 * vor_v(dist_index_int+1,k) + &
+            v(i,j,k) = (ratio2 * vor_v(dist_index_int+1,k) + &
                         ratio1 * vor_v(dist_index_int+2,k)) * cos_theta
           end if
         end if
@@ -121,7 +121,7 @@ subroutine add_vortex
 end subroutine add_vortex
 subroutine add_u_profile
   do k = 1,nz
-    u(k,:,:) = u(k,:,:) + u_profile(k)
+    u(:,:,k) = u(:,:,k) + u_profile(k)
   end do
 end subroutine add_u_profile
 subroutine input_bses
@@ -196,7 +196,7 @@ subroutine output_3d(data,filename)
   implicit none
   character(200) filename
   character(200) filepath
-  real(8) :: data(nz,ny,nx)
+  real(8) :: data(nx,ny,nz)
   filepath = trim(output_folderpath)//trim(filename)
   open(unit=10, iostat=ios, file=filepath, action='write', &
         &access="stream", form='unformatted',status='replace')
