@@ -1,17 +1,21 @@
 module settings
   implicit none
-  real(4) :: triangle_size
+  real(8) :: triangle_size
   integer :: nx
   integer :: ny
   integer :: nz
-  real(4) :: f
+  real(8) :: f
+  logical :: add_vortex_flg
+  logical :: add_u_profile_flg
 
   namelist /setting_params/ &
   triangle_size, &
   nx, &
   ny, &
   nz, &
-  f
+  f, &
+  add_vortex_flg, &
+  add_u_profile_flg
 contains
 subroutine read_setting_params(filename)
   character(len=*), intent(in) :: filename

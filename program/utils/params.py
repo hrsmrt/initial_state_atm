@@ -20,6 +20,8 @@ settings = {
     "ny" : ny,
     "nz" : nz,
     "f"  : 3.774676e-05,
+    "add_vortex_flg" : False,
+    "add_u_profile_flg" : False,
   },
   "vortex_param" : {
     "vortex_folder" : "vortex/",

@@ -29,7 +29,7 @@ ygrid = np.array([dy * 0.5 + i * dy for i in range(ny)])
 
 def main():
 	set_plt()
-	data = np.fromfile(data_dir + settings["filepath_params"]["fname_u"],dtype=np.float32)
+	data = np.fromfile(data_dir + settings["filepath_params"]["fname_u"],dtype=np.float64)
 	data = data.reshape(nz,ny,nx)
 	data = data.transpose(2,1,0)
 	print("min: ",np.min(data[:,:,:]))

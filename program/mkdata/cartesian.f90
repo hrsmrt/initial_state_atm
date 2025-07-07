@@ -51,21 +51,21 @@ program mkdata_cart_atm
     tem(:,:,k) = vor_T(nr,k)
     qv(:,:,k) = bs_qv(k)
   end do
-  call add_vortex
-  call add_u_profile
+  if (add_vortex_flg) call add_vortex
+  if (add_u_profile_flg) call add_u_profile
   call output_data
 contains
 subroutine add_vortex
   implicit none
   integer :: i,j,k
-  real(4) :: dx,dy
-  real(4) :: dist_x,dist_y
-  real(4) :: dist
-  real(4) :: dist_index
+  real(8) :: dx,dy
+  real(8) :: dist_x,dist_y
+  real(8) :: dist
+  real(8) :: dist_index
   integer :: dist_index_int
-  real(4) :: ratio1,ratio2
-  real(4) :: dr
-  real(4) :: sin_theta,cos_theta
+  real(8) :: ratio1,ratio2
+  real(8) :: dr
+  real(8) :: sin_theta,cos_theta
   dx = triangle_size / real(nx)
   dy = triangle_size / real(ny)
   dr = vortex_size / real(nr)
@@ -148,7 +148,7 @@ end subroutine output_data
 subroutine input_bsdata(data,input_file)
   implicit none
   character(128) :: input_file
-  real(4), intent(inout) :: data(74)
+  real(8), intent(inout) :: data(74)
   open(unit=10, iostat=ios, file=input_file, action='read', &
         & form='formatted', status='old', position='rewind')
   ! ファイルが正常に開けたかどうかをチェックする
@@ -162,7 +162,7 @@ end subroutine input_bsdata
 subroutine input_data_vortex(data,filename)
   implicit none
   character(len=*), intent(in) ::filename
-  real(4), intent(out) :: data(nr,nz)
+  real(8), intent(out) :: data(nr,nz)
   integer :: ios
   character(len=char_len) :: filepath
   filepath = "data/vortex/"//trim(filename)
@@ -180,7 +180,7 @@ subroutine output_1d(data,filename)
   implicit none
   character(200) filename
   character(200) filepath
-  real(4) :: data(nz)
+  real(8) :: data(nz)
   filepath = trim(output_folderpath)//trim(filename)
   open(unit=10, iostat=ios, file=filepath, action='write', &
         &access="stream", form='formatted',status='replace')
@@ -196,7 +196,7 @@ subroutine output_3d(data,filename)
   implicit none
   character(200) filename
   character(200) filepath
-  real(4) :: data(nx,ny,nz)
+  real(8) :: data(nx,ny,nz)
   filepath = trim(output_folderpath)//trim(filename)
   open(unit=10, iostat=ios, file=filepath, action='write', &
         &access="stream", form='unformatted',status='replace')
