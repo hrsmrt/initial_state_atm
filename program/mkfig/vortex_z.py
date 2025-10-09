@@ -13,28 +13,15 @@ os.makedirs(output_dir, exist_ok=True)
 
 vgrid_c = np.loadtxt(settings["filepath_params"]["filepath_vgrid_c"])
 
-plt.figure(figsize=(8,8)) # inch
-#plt.rcParams['font.family'] ='Hiragino Maru Gothic Pro'
-# plt.rcParams['text.usetex'] = True # 日本語と併用不可
-plt.rcParams['xtick.direction'] = 'in'
-plt.rcParams['ytick.direction'] = 'in'
-plt.rcParams['font.size'] = 12 # pt
-plt.rcParams['axes.linewidth'] = 1.0
-plt.rcParams['xtick.major.width'] = 0.55
-plt.rcParams['ytick.major.width'] = 0.55
-# plt.xlim(300,400)
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.scatter(pix, count, label='', s=5)
-plt.xlabel("m/s")
-plt.ylabel("km")
-plt.grid(True)
-# plt.axis('equal')
+plt_style = settings["mkfig_params"]["plt_style"]
 
 data = np.loadtxt(data_dir + "v_z.txt")
+
+plt.style.use(plt_style)
+fig, ax = plt.subplots(figsize=(2.5,2.5))
 plt.plot(data,vgrid_c*1e-3)
-plt.savefig(output_dir + "v_z.png",
-			dpi=200,
-			bbox_inches="tight",
-			pad_inches=0.05)
+plt.xticks([0,0.5,1])
+plt.yticks([0,10,20,30,40])
+plt.ylabel("高度 [km]")
+plt.savefig(f"{output_dir}v_z.png")
 plt.close()

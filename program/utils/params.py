@@ -71,5 +71,8 @@ settings = {
   "cart_param" : {
     "vor_cx" : vor_cx,
     "vor_cy" : vor_cy,
+  },
+  "mkfig_params" : {
+      "plt_style" : "/Users/hiroshimurata/matplotlib/stylesheet/presentation_jp.style"
   }
 }

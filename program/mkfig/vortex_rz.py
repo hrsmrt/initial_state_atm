@@ -4,7 +4,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../util
 import numpy as np
 import matplotlib.pyplot as plt
 from params import settings
-from params import database_dir
 
 data_dir = settings["filepath_params"]["output_folderpath"] \
             + settings["vortex_param"]["vortex_folder"]
@@ -22,80 +21,108 @@ bs_pre = np.loadtxt(settings["filepath_params"]["filepath_bs_pre"])
 bs_tem = np.loadtxt(settings["filepath_params"]["filepath_bs_tem"])
 bs_rho = np.loadtxt(data_dir + "bs_rho.txt")
 
-X,Y = np.meshgrid(grid_r*1e-3, vgrid_c*1e-3)
+plt_style = settings["mkfig_params"]["plt_style"]
 
+X,Y = np.meshgrid(grid_r*1e-3, vgrid_c*1e-3)
 
 def main():
 	set_plt()
+	fig, ax = plt.subplots(figsize=(2.5,2)) # inch
 	data = np.loadtxt(data_dir + "vor_v.txt")
 	data = data.reshape(nz,nr)
-	plt.contourf(X,Y,data, levels=20, cmap="jet")
-	save_fig("vor_v_all.png")
-	plt.ylim(0, 20)
-	save_fig("vor_v.png")
+	c = ax.contourf(X,Y,data, levels=20, cmap="jet")
+	fig.colorbar(c)
+	ax.set_xticks([0,1000])
+	ax.minorticks_on()
+	ax.grid(which='major', axis='both', color='gray', linewidth=0.8)
+	ax.grid(which='minor', axis='both', color='gray', linestyle=':', linewidth=0.5)
+	ax.set_ylim(0, 40)
+	ax.set_yticks([0,40])
+	plt.savefig(f"{output_dir}vor_v_all.png")
+	ax.set_ylim(0, 20)
+	ax.set_yticks([0,20])
+	plt.savefig(f"{output_dir}vor_v.png")
 	plt.close()
+
 	set_plt()
+	fig, ax = plt.subplots(figsize=(2.5,2)) # inch
+	ax.set_title("気圧偏差 [hPa]")
 	data = np.loadtxt(data_dir + "vor_p.txt")
 	data = data.reshape(nz,nr)
 	for i in range(nz):
 		data[i,:] = data[i,:] - bs_pre[i]
-	plt.contourf(X,Y,data*1e-2, levels=20, cmap="jet_r")
-	plt.colorbar()
-	save_fig("vor_p_all.png")
-	plt.ylim(0, 20)
-	save_fig("vor_p.png")
+	c = ax.contourf(X,Y,data*1e-2, levels=20, cmap="jet_r")
+	fig.colorbar(c)
+	ax.set_xticks([0,1000])
+	ax.minorticks_on()
+	ax.grid(which='major', axis='both', color='gray', linewidth=0.8)
+	ax.grid(which='minor', axis='both', color='gray', linestyle=':', linewidth=0.5)
+	ax.set_ylim(0, 40)
+	ax.set_yticks([0,40])
+	plt.savefig(f"{output_dir}vor_p_all.png")
+	ax.set_ylim(0, 20)
+	ax.set_yticks([0,20])
+	plt.savefig(f"{output_dir}vor_p.png")
 	plt.close()
+
 	set_plt()
+	fig, ax = plt.subplots(figsize=(2.5,2)) # inch
 	data = np.loadtxt(data_dir + "vor_T.txt")
 	data = data.reshape(nz,nr)
 	for i in range(nz):
 		data[i,:] = data[i,:] - bs_tem[i]
-	plt.contourf(X[:70,:],Y[:70,:],data[:70,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
-	plt.colorbar()
-	save_fig("vor_T_all.png")
+	c = ax.contourf(X[:70,:],Y[:70,:],data[:70,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
+	fig.colorbar(c)
+	ax.set_title("気温偏差 [K]")
+	ax.set_xticks([0,1000])
+	ax.set_ylim(0,40)
+	ax.set_yticks([0,40])
+	ax.minorticks_on()
+	ax.grid(which='major', axis='both', color='gray', linewidth=0.8)
+	ax.grid(which='minor', axis='both', color='gray', linestyle=':', linewidth=0.5)
+	plt.savefig(f"{output_dir}vor_T_all.png")
 	plt.close()
+	
 	set_plt()
-	plt.contourf(X[:60,:],Y[:60,:],data[:60,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
-	plt.ylim(0, 20)
-	save_fig("vor_T.png")
+	fig, ax = plt.subplots(figsize=(2.5,2)) # inch
+	c = ax.contourf(X[:60,:],Y[:60,:],data[:60,:], levels=20, cmap="seismic",vmax=4, vmin=-4)
+	fig.colorbar(c)
+	ax.set_title("気温偏差 [K]")
+	ax.set_xticks([0,1000])
+	ax.set_ylim(0,20)
+	ax.set_yticks([0,20])
+	ax.minorticks_on()
+	ax.grid(which='major', axis='both', color='gray', linewidth=0.8)
+	ax.grid(which='minor', axis='both', color='gray', linestyle=':', linewidth=0.5)
+	plt.savefig(f"{output_dir}vor_T.png")
 	plt.close()
+
 	set_plt()
+	fig, ax = plt.subplots(figsize=(2.5,2)) # inch
 	data = np.loadtxt(data_dir + "vor_rho.txt")
 	data = data.reshape(nz,nr)
 	for i in range(nz):
 		data[i,:] = data[i,:] - bs_rho[i]
-	plt.contourf(X,Y,data, levels=20, cmap="seismic", vmax=0.018, vmin=-0.018)
-	plt.colorbar()
-	save_fig("vor_rho_all.png")
-	plt.ylim(0, 20)
-	save_fig("vor_rho.png")
+	c = ax.contourf(X,Y,data*1e2, levels=20, cmap="seismic", vmax=1.8, vmin=-1.8)
+	fig.colorbar(c)
+	ax.set_title(r"密度偏差 [$ \times 10^{-2}$ kg/m$^3$]")
+	ax.set_xticks([0,1000])
+	ax.minorticks_on()
+	ax.grid(which='major', axis='both', color='gray', linewidth=0.8)
+	ax.grid(which='minor', axis='both', color='gray', linestyle=':', linewidth=0.5)
+	ax.set_ylim(0, 40)
+	ax.set_yticks([0,40])
+	plt.savefig(f"{output_dir}vor_rho_all.png")
+	ax.set_ylim(0, 20)
+	ax.set_yticks([0,20])
+	plt.savefig(f"{output_dir}vor_rho.png")
 	plt.close()
 
-
 def set_plt():
-	plt.figure(figsize=(4,4)) # inch
-	#plt.rcParams['font.family'] ='Hiragino Maru Gothic Pro'
-	# plt.rcParams['text.usetex'] = True # 日本語と併用不可
-	plt.rcParams['xtick.direction'] = 'in'
-	plt.rcParams['ytick.direction'] = 'in'
-	plt.rcParams['font.size'] = 12 # pt
-	plt.rcParams['axes.linewidth'] = 1.0
-	plt.rcParams['xtick.major.width'] = 0.55
-	plt.rcParams['ytick.major.width'] = 0.55
-	# plt.xlim(300,400)
-	# plt.xscale('log')
-	# plt.yscale('log')
-	# plt.scatter(pix, count, label='', s=5)
-	plt.xlabel("r (km)")
-	plt.ylabel("z (km)")
-	plt.grid(True)
-	# plt.axis('equal')
-
-def save_fig(filename):
-	plt.savefig(output_dir + filename,
-				dpi=200,
-				bbox_inches="tight",
-				pad_inches=0.05)
+	plt.figure(figsize=(2.5,2)) # inch
+	plt.style.use(plt_style)
+	plt.xlabel("半径 [km]")
+	plt.ylabel("高度 [km]")
 
 if __name__ == "__main__":
 		main()
