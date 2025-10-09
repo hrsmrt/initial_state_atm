@@ -47,8 +47,8 @@ program mkdata_cart_atm
   call input_bses
   call input_vortex
   do k = 1, nz
-    pre(:,:,k) = vor_p(nr,k)
-    tem(:,:,k) = vor_T(nr,k)
+    pre(:,:,k) = bs_pre(k)
+    tem(:,:,k) = bs_tem(k)
     qv(:,:,k) = bs_qv(k)
   end do
   if (add_vortex_flg) call add_vortex
