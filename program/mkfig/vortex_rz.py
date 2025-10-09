@@ -16,10 +16,10 @@ nz = settings["setting_params"]["nz"]
 nr = settings["vortex_param"]["nr"]
 dr = vortex_size / nr
 
-vgrid_c = np.loadtxt(f"{database_dir}vgrid/vgrid_c74.txt")
+vgrid_c = np.loadtxt(settings["filepath_params"]["filepath_vgrid_c"])
 grid_r = np.array([i * dr for i in range(nr)])
-bs_pre = np.loadtxt(f"{database_dir}sounding/sounding_gl9T28/bs_pres.dat")
-bs_tem = np.loadtxt(f"{database_dir}sounding/sounding_gl9T28/bs_tem.dat")
+bs_pre = np.loadtxt(settings["filepath_params"]["filepath_bs_pre"])
+bs_tem = np.loadtxt(settings["filepath_params"]["filepath_bs_tem"])
 bs_rho = np.loadtxt(data_dir + "bs_rho.txt")
 
 X,Y = np.meshgrid(grid_r*1e-3, vgrid_c*1e-3)

@@ -11,7 +11,7 @@ data_dir = settings["filepath_params"]["output_folderpath"] \
 output_dir = "./fig/vortex/z/"
 os.makedirs(output_dir, exist_ok=True)
 
-vgrid_c = np.loadtxt(f"{database_dir}vgrid/vgrid_c74.txt")
+vgrid_c = np.loadtxt(settings["filepath_params"]["filepath_vgrid_c"])
 
 plt.figure(figsize=(8,8)) # inch
 #plt.rcParams['font.family'] ='Hiragino Maru Gothic Pro'

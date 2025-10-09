@@ -11,10 +11,6 @@ data_dir = settings["filepath_params"]["output_folderpath"] \
 output_dir = "./fig/vortex/r/"
 os.makedirs(output_dir, exist_ok=True)
 
-
-vgrid_c = np.loadtxt(f"{database_dir}vgrid/vgrid_c74.txt")
-
-
 plt.figure(figsize=(8,8)) # inch
 #plt.rcParams['font.family'] ='Hiragino Maru Gothic Pro'
 # plt.rcParams['text.usetex'] = True # 日本語と併用不可
