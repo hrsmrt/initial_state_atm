@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from params import database_dir
 
-filename = "wind_profiles.jpeg"
+filename = "wind_profiles.png"
 vgrid_c = np.loadtxt(f"{database_dir}vgrid/vgrid_c74.txt")
 
 dirs = ["z_shear_1", "z_shear_5", "z_shear_10", "z_shear_15", "z_shear_inf"]

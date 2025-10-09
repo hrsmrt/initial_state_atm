@@ -35,21 +35,21 @@ plt.grid(True)
 
 data = np.loadtxt(data_dir + "vt.txt")
 line,  = plt.plot(data)
-plt.savefig(output_dir + "vt.jpeg",
+plt.savefig(output_dir + "vt.png",
 			dpi=200,
 			bbox_inches="tight",
 			pad_inches=0.05)
 
 data = np.loadtxt(data_dir + "v_r.txt")
 line.set_ydata(data)
-plt.savefig(output_dir + "v_r.jpeg",
+plt.savefig(output_dir + "v_r.png",
 			dpi=200,
 			bbox_inches="tight",
 			pad_inches=0.05)
 
 data = np.loadtxt(data_dir + "v_smooth.txt")
 line.set_ydata(data)
-plt.savefig(output_dir + "v_smooth.jpeg",
+plt.savefig(output_dir + "v_smooth.png",
 			dpi=200,
 			bbox_inches="tight",
 			pad_inches=0.05)
@@ -61,7 +61,7 @@ plt.plot(data, label="v_r")
 data = np.loadtxt(data_dir + "v_smooth.txt")
 plt.plot(data, label="v_smooth")
 plt.legend()
-plt.savefig(output_dir + "v_all.jpeg",
+plt.savefig(output_dir + "v_all.png",
 			dpi=200,
 			bbox_inches="tight",
 			pad_inches=0.05)

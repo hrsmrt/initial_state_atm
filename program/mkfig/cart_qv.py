@@ -43,7 +43,7 @@ def main():
 		plt.ylabel("z (km)")
 		plt.contourf(X,Y,data[x,:,:].T, levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
-		save_fig(output_dir,f"x{x:02d}.jpeg")
+		save_fig(output_dir,f"x{x:02d}.png")
 		plt.close()
 	X,Y = np.meshgrid(xgrid * 1e-3, vgrid_c * 1e-3)
 	for y in range(0,ny,int(nx/16)):
@@ -54,7 +54,7 @@ def main():
 		plt.ylabel("z (km)")
 		plt.contourf(X,Y,data[:,y,:].T, levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
-		save_fig(output_dir2,f"y{y:02d}.jpeg")
+		save_fig(output_dir2,f"y{y:02d}.png")
 		plt.close()
 	X,Y = np.meshgrid(xgrid * 1e-3, ygrid * 1e-3)
 	for z in range(0,nz,5):
@@ -65,7 +65,7 @@ def main():
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.contourf(X,Y,data[:,:,z].T, levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
-		save_fig(output_dir3,f"z{z:02d}.jpeg")
+		save_fig(output_dir3,f"z{z:02d}.png")
 		plt.close()
 
 def set_plt():

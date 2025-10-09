@@ -10,7 +10,7 @@ data_path = settings["filepath_params"]["output_folderpath"] \
             + settings["wind_profile_param"]["wind_profile_folder"] \
             + settings["wind_profile_param"]["filename"]
 
-filename = "wind_profile.jpeg"
+filename = "wind_profile.png"
 data = np.loadtxt(data_path)
 vgrid_c = np.loadtxt(f"{database_dir}vgrid/vgrid_c74.txt")
 

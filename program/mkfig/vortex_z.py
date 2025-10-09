@@ -33,7 +33,7 @@ plt.grid(True)
 
 data = np.loadtxt(data_dir + "v_z.txt")
 plt.plot(data,vgrid_c*1e-3)
-plt.savefig(output_dir + "v_z.jpeg",
+plt.savefig(output_dir + "v_z.png",
 			dpi=200,
 			bbox_inches="tight",
 			pad_inches=0.05)
