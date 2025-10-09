@@ -22,8 +22,8 @@ program vortex
   beta = 2.0
   n_balance = 100
   filepath_vgrid_c = "./vgrid_c.txt"
-  fpath_bs_pre = "./bs_p.txt"
-  fpath_bs_tem = "./bs_T.txt"
+  filepath_bs_pre = "./bs_p.txt"
+  filepath_bs_tem = "./bs_T.txt"
   output_folderpath = "./"
   open(unit=10, file="config/param.nml")
   read(10, nml=setting_params)
@@ -65,8 +65,8 @@ program vortex
   write(11,*) "filepath_vgrid_c = ", filepath_vgrid_c
   write(11,*) "output_folderpath = ", output_folderpath
   call input_1d(z,filepath_vgrid_c)
-  call input_1d(p_bs,fpath_bs_pre)
-  call input_1d(T_bs,fpath_bs_tem)
+  call input_1d(p_bs,filepath_bs_pre)
+  call input_1d(T_bs,filepath_bs_tem)
   ! vor_T(:,:z_calc_max) = vor_p(:,:z_calc_max) / (287.1 * vor_rho_all(:,:z_calc_max))
   rho_bs = p_bs / (287.1 * T_bs) ! 基本場の密度
   write(11,*) "z_index, z(高度), p(圧力), T(温度), rho(密度)"

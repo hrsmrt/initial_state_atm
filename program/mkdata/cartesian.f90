@@ -125,10 +125,10 @@ subroutine add_u_profile
   end do
 end subroutine add_u_profile
 subroutine input_bses
-  call input_bsdata(bs_pre, fpath_bs_pre)
-  call input_bsdata(bs_tem, fpath_bs_tem)
-  call input_bsdata(bs_qv, fpath_bs_qv)
-  call input_bsdata(u_profile, fpath_u_profile)
+  call input_bsdata(bs_pre, filepath_bs_pre)
+  call input_bsdata(bs_tem, filepath_bs_tem)
+  call input_bsdata(bs_qv, filepath_bs_qv)
+  call input_bsdata(u_profile, filepath_u_profile)
 end subroutine input_bses
 subroutine input_vortex
   call input_data_vortex(vor_p, "vor_p.txt")
