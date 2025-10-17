@@ -2,14 +2,20 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
-from params import settings
-from params import database_dir
+# Prefer params from current working dir ./setting/params.py; fall back to program/utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), 'setting')))
+try:
+	import params
+except Exception:
+	sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
+	import params
+settings = params.settings
+database_dir = getattr(params, 'database_dir', '')
 
-data_dir = "./data/cart/"
-output_dir = "./fig/cart/qv_yz/"
-output_dir2 = "./fig/cart/qv_zx/"
-output_dir3 = "./fig/cart/qv_xy/"
+data_dir = f"{settings['filepath_params']['output_folderpath']}/data/"
+output_dir = f"{settings['filepath_params']['output_folderpath']}/fig/cart/qv_yz/"
+output_dir2 = f"{settings['filepath_params']['output_folderpath']}/fig/cart/qv_zx/"
+output_dir3 = f"{settings['filepath_params']['output_folderpath']}/fig/cart/qv_xy/"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(output_dir2, exist_ok=True)
 os.makedirs(output_dir3, exist_ok=True)
@@ -31,7 +37,6 @@ def main():
 	set_plt()
 	data = np.fromfile(data_dir + settings["filepath_params"]["fname_qv"],dtype=np.float64)
 	data = data.reshape(nz,ny,nx)
-	data = data.transpose(2,1,0)
 	print("min: ",np.min(data))
 	print("max: ",np.max(data))
 	X,Y = np.meshgrid(ygrid * 1e-3, vgrid_c * 1e-3)
@@ -41,7 +46,7 @@ def main():
 		plt.yticks([10,20,30])
 		plt.xlabel("y (km)")
 		plt.ylabel("z (km)")
-		plt.contourf(X,Y,data[x,:,:].T, levels=20, cmap="jet",extend="both")
+		plt.contourf(X,Y,data[:,:,x], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
 		save_fig(output_dir,f"x{x:02d}.png")
 		plt.close()
@@ -52,7 +57,7 @@ def main():
 		plt.yticks([10,20,30])
 		plt.xlabel("x (km)")
 		plt.ylabel("z (km)")
-		plt.contourf(X,Y,data[:,y,:].T, levels=20, cmap="jet",extend="both")
+		plt.contourf(X,Y,data[:,y,:], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
 		save_fig(output_dir2,f"y{y:02d}.png")
 		plt.close()
@@ -63,7 +68,7 @@ def main():
 		plt.ylabel("y (km)")
 		plt.xticks([16,2048,4080],[0,2048,4096])
 		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.contourf(X,Y,data[:,:,z].T, levels=20, cmap="jet",extend="both")
+		plt.contourf(X,Y,data[z,:,:], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="kg/kg")
 		save_fig(output_dir3,f"z{z:02d}.png")
 		plt.close()

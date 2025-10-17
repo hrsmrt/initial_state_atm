@@ -12,16 +12,13 @@ import os
 import sys
 import numpy as np
 
-# Try to import params from the project's utils; if that fails, add the
-# local utils directory to sys.path and import params directly.
-utils_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils'))
-if utils_dir not in sys.path:
-    sys.path.insert(0, utils_dir)
+# Prefer params from current working dir ./setting/params.py; fall back to program/utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), 'setting')))
 try:
-    import params
-except Exception as e:
-    raise ImportError(f"Could not import params from {utils_dir}") from e
-
+	import params
+except Exception:
+	sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
+	import params
 
 def main():
     settings = params.settings
@@ -46,7 +43,7 @@ def main():
 
     # filepaths
     fp = settings['filepath_params']
-    output_folderpath = os.path.join(fp['output_folderpath'], 'cart/')
+    output_folderpath = os.path.join(fp['output_folderpath'], 'data/')
     os.makedirs(output_folderpath, exist_ok=True)
 
     # cart params (vor_cx, vor_cy provided as integers in settings)
@@ -117,9 +114,12 @@ def main():
     def output_3d(data, filename):
         filepath = os.path.join(output_folderpath, filename)
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        # write raw binary in Fortran (column-major) order to mimic Fortran unformatted
+        # reorder axes to (z, y, x) before writing so the file contains
+        # data in (z,y,x) layout. We write in Fortran (column-major) order
+        # of the transposed array to keep a deterministic memory layout.
+        arr = np.transpose(data, (2, 1, 0))
         with open(filepath, 'wb') as f:
-            np.asfortranarray(data).tofile(f)
+            np.asfortranarray(arr).tofile(f)
 
     # read base-state and profiles
     input_bsdata(bs_pre, fp['filepath_bs_pre'])

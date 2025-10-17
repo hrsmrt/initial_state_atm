@@ -2,14 +2,24 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
-from params import settings
-from params import database_dir
+# Prefer params from current working dir ./setting/params.py; fall back to program/utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), 'setting')))
+try:
+	import params
+except Exception:
+	sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
+	import params
+settings = params.settings
+database_dir = getattr(params, 'database_dir', '')
 
-data_dir = "./data/cart/"
-output_dir = "./fig/cart/tem_yz/"
-output_dir2 = "./fig/cart/tem_zx/"
-output_dir3 = "./fig/cart/tem_xy/"
+if len(sys.argv) > 1:
+    mpl_style_sheet = sys.argv[1]
+
+
+data_dir = f"{settings['filepath_params']['output_folderpath']}/data/"
+output_dir = f"{settings['filepath_params']['output_folderpath']}/fig/cart/tem_yz/"
+output_dir2 = f"{settings['filepath_params']['output_folderpath']}/fig/cart/tem_zx/"
+output_dir3 = f"{settings['filepath_params']['output_folderpath']}/fig/cart/tem_xy/"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(output_dir2, exist_ok=True)
 os.makedirs(output_dir3, exist_ok=True)
@@ -28,68 +38,43 @@ ygrid = np.array([dy * 0.5 + i * dy for i in range(ny)])
 
 
 def main():
-	set_plt()
 	data = np.fromfile(data_dir + settings["filepath_params"]["fname_tem"],dtype=np.float64)
 	data = data.reshape(nz,ny,nx)
-	data = data.transpose(2,1,0)
 	print("min: ",np.min(data))
 	print("max: ",np.max(data))
-	X,Y = np.meshgrid(ygrid * 1e-3, vgrid_c * 1e-3)
+	Y,Z = np.meshgrid(ygrid, vgrid_c)
 	for x in range(0,nx,int(nx/16)):
-		set_plt()
-		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.yticks([10,20,30])
+		plt.style.use(mpl_style_sheet)
+		plt.xticks([0,int(max(ygrid))],[0,int(max(ygrid)/1e3)])
+		plt.yticks([0,10e3,20e3,30e3,40e3],["0","10","20","30","40"])
 		plt.xlabel("y (km)")
 		plt.ylabel("z (km)")
-		plt.contourf(X,Y,data[x,:,:].T, levels=20, cmap="jet",extend="both")
+		plt.contourf(Y,Z,data[:,:,x], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="K")
-		save_fig(output_dir,f"x{x:02d}.png")
+		plt.savefig(output_dir + f"x{x:02d}.png")
 		plt.close()
-	X,Y = np.meshgrid(xgrid * 1e-3, vgrid_c * 1e-3)
+	X,Z = np.meshgrid(xgrid, vgrid_c)
 	for y in range(0,ny,int(nx/16)):
-		set_plt()
-		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.yticks([10,20,30])
+		plt.style.use(mpl_style_sheet)
+		plt.xticks([0,int(max(xgrid))],[0,int(max(xgrid)/1e3)])
+		plt.yticks([0,10e3,20e3,30e3,40e3],["0","10","20","30","40"])
 		plt.xlabel("x (km)")
 		plt.ylabel("z (km)")
-		plt.contourf(X,Y,data[:,y,:].T, levels=20, cmap="jet",extend="both")
+		plt.contourf(X,Z,data[:,y,:], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="K")
-		save_fig(output_dir2,f"y{y:02d}.png")
+		plt.savefig(output_dir2 + f"y{y:02d}.png")
 		plt.close()
-	X,Y = np.meshgrid(xgrid * 1e-3, ygrid * 1e-3)
+	X,Y = np.meshgrid(xgrid, ygrid)
 	for z in range(0,nz,5):
-		set_plt()
+		plt.style.use(mpl_style_sheet)
 		plt.xlabel("x (km)")
 		plt.ylabel("y (km)")
-		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.xticks([16,2048,4080],[0,2048,4096])
-		plt.contourf(X,Y,data[:,:,z].T, levels=20, cmap="jet",extend="both")
+		plt.xticks([0,int(max(xgrid))],[0,int(max(xgrid)/1e3)])
+		plt.yticks([0,int(max(ygrid))],[0,int(max(ygrid)/1e3)])
+		plt.contourf(X,Y,data[z,:,:], levels=20, cmap="jet",extend="both")
 		plt.colorbar(label="K")
-		save_fig(output_dir3,f"z{z:02d}.png")
+		plt.savefig(output_dir3 + f"z{z:02d}.png")
 		plt.close()
-
-def set_plt():
-	plt.figure(figsize=(4,4)) # inch
-	#plt.rcParams['font.family'] ='Hiragino Maru Gothic Pro'
-	# plt.rcParams['text.usetex'] = True # 日本語と併用不可
-	plt.rcParams['xtick.direction'] = 'in'
-	plt.rcParams['ytick.direction'] = 'in'
-	plt.rcParams['font.size'] = 12 # pt
-	plt.rcParams['axes.linewidth'] = 1.0
-	plt.rcParams['xtick.major.width'] = 0.55
-	plt.rcParams['ytick.major.width'] = 0.55
-	# plt.xlim(300,400)
-	# plt.xscale('log')
-	# plt.yscale('log')
-	# plt.scatter(pix, count, label='', s=5)
-	plt.grid(True)
-	# plt.axis('equal')
-     
-def save_fig(output_dir,filename):
-	plt.savefig(output_dir + filename,
-				dpi=200,
-				bbox_inches="tight",
-				pad_inches=0.05)
-
+   
 if __name__ == "__main__":
   main()

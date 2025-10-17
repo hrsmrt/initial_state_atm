@@ -1,3 +1,7 @@
+import os
+# Home directory (used for resolving user-specific paths if needed)
+HOME_DIR = os.path.expanduser('~')
+
 triangle_size = 4096e3 # m
 gl = 9
 nx = 2 ** gl
@@ -11,7 +15,7 @@ vor_cx_float = triangle_size * 0.25
 vor_cx = int(vor_cx_float / dx)
 vor_cy_float = triangle_size * 0.25 * 3 ** 0.5
 vor_cy = int(vor_cy_float / dy)
-database_dir = "hogehoge/database/"
+database_dir = f"{HOME_DIR}/p-nicam/database/"
 
 settings = {
   "setting_params" : {
@@ -22,6 +26,7 @@ settings = {
     "f"  : 3.774676e-05,
     "add_vortex_flg" : False,
     "add_u_profile_flg" : False,
+    "add_perturbation_tem_flg" :  False
   },
   "vortex_param" : {
     "vortex_folder" : "vortex/",
@@ -51,13 +56,16 @@ settings = {
     "u1" : 0,
     "u2" : 5
   },
+  "perturbation_param" : {
+    "perturbation_tem_top" : 3000.0 # m
+  },
   "filepath_params" : {
     "filepath_vgrid_c" : f"{database_dir}vgrid/vgrid_c74.txt",
-    "filepath_bs_pre" : f"{database_dir}sounding/sounding_gl9T28/bs_pres.dat",
-    "filepath_bs_tem" : f"{database_dir}sounding/sounding_gl9T28/bs_tem.dat",
-    "filepath_bs_qv" : f"{database_dir}sounding/sounding_gl9T28/bs_qv.dat",
+    "filepath_bs_pre" : f"{database_dir}sounding/dunion_sounding/var1/bs_pres.dat",
+    "filepath_bs_tem" : f"{database_dir}sounding/dunion_sounding/var1/bs_tem.dat",
+    "filepath_bs_qv" : f"{database_dir}sounding/dunion_sounding/var1/bs_qv.dat",
     "filepath_u_profile" : "./data/wind_profile/bs_u.txt",
-    "output_folderpath" : "./data/",
+    "output_folderpath" : "./init_atm_cartesian/",
     "fname_bs_pre" : "bs_pre.txt",
     "fname_bs_tem" : "bs_tem.txt",
     "fname_bs_qv" : "bs_qv.txt",
@@ -73,6 +81,6 @@ settings = {
     "vor_cy" : vor_cy,
   },
   "mkfig_params" : {
-      "plt_style" : "/Users/hiroshimurata/matplotlib/stylesheet/presentation_jp.style"
+      "plt_style" : f"{HOME_DIR}/matplotlib/stylesheet/presentation_jp.style"
   }
 }

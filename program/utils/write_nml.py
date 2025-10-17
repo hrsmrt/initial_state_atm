@@ -1,5 +1,13 @@
 import os
-from params import settings
+import sys
+# Prefer params from current working dir ./setting/params.py; fall back to program/utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), 'setting')))
+try:
+    import params
+except Exception:
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '')))
+    import params
+settings = params.settings
 
 def main():
     os.makedirs("config", exist_ok=True)
